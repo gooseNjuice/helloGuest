@@ -1,5 +1,4 @@
-#!/usr/bin/env node
-
+var sequelize = require ('../db/db')
 /**
  * Module dependencies.
  */
@@ -27,7 +26,14 @@ var server = http.createServer(app);
 
 server.listen(port);
 server.on('error', onError);
-server.on('listening', onListening);
+server.on('listening', async ()=>{
+  try {
+    await sequelize.authenticate();
+    console.log('Connection has been established successfully.');
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+  }
+});
 
 /**
  * Normalize a port into a number, string, or false.
