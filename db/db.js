@@ -1,9 +1,21 @@
-const {Sequelize} = require('sequelize');
+const mongoose = require('mongoose');
+const config = require('config');
 
-const sequelize = new Sequelize('postgres://ifkmujgo:MHQfK0LWD1gfOga1JGFQIEgQXTiQWeiW@kandula.db.elephantsql.com:5432/ifkmujgo', {
-    dialect: 'postgres',
-    logging: console.log,
-    ssl: true
-});
+const db = config.get('mongoURI');
 
-module.exports = sequelize;
+const connectDB = async () => {
+    try {
+        await mongoose.connect(db, {
+            useNewUrlParser: true,
+            useCreateIndex: true,
+            useFindAndModify: false,
+            useUnifiedTopology: true
+        })
+        console.log('MongoDB Connected...');
+    } catch (e) {
+        console.error(e.message);
+        process.exit(1);
+    }
+}
+
+module.exports = connectDB;
