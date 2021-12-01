@@ -1,21 +1,11 @@
-const mongoose = require('mongoose');
-const config = require('config');
+const MongoClient = require('mongodb').MongoClient;
 
-const db = config.get('mongoURI');
+const uri = "mongodb+srv://gooseNJuice:<password>@cluster0.cbyy6.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 
-const connectDB = async () => {
-    try {
-        await mongoose.connect(db, {
-            useNewUrlParser: true,
-            useCreateIndex: true,
-            useFindAndModify: false,
-            useUnifiedTopology: true
-        })
-        console.log('MongoDB Connected...');
-    } catch (e) {
-        console.error(e.message);
-        process.exit(1);
-    }
-}
+const client = new MongoClient(uri, {useNewUrlParser: true, useUnifiedTopology: true});
 
-module.exports = connectDB;
+client.connect(err => {
+    const collection = client.db("test").collection("devices");
+    // perform actions on the collection object
+    client.close();
+});
